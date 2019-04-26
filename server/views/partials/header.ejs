@@ -60,17 +60,11 @@
 
           <% } %>
 
-
-
           <a class="nav-link" href="/"><i class="fa fa-lg fa-home"></i> Home <span class="sr-only">(current)</span></a>
 
         </li>
 
-
-
-
-
-        <% if (title == "About") { %>
+        <% if (title == "Alert") { %>
 
         <li class="nav-item active">
 
@@ -80,15 +74,12 @@
 
           <% } %>
 
-          <a class="nav-link" href="/about"><i class="fa fa-lg fa-info"></i> About</a>
+          <a class="nav-link" href="/alert"><i class="fa fa-lg fa-envelope-open-text"></i> Alert</a>
 
         </li>
 
-
-
-
-
-        <% if (title == "Products") { %>
+ 
+        <% if (title == "Video") { %>
 
         <li class="nav-item active">
 
@@ -98,15 +89,12 @@
 
           <% } %>
 
-          <a class="nav-link" href="/products"><i class="fa fa-lg fa-briefcase"></i> Products</a>
+          <a class="nav-link" href="/video"><i class="fa fa-lg fa-play"></i> Video</a>
 
         </li>
 
 
-
-
-
-        <% if (title == "Services") { %>
+        <% if (title == "Check List") { %>
 
         <li class="nav-item active">
 
@@ -116,10 +104,11 @@
 
           <% } %>
 
-          <a class="nav-link" href="/services"><i class="fa fa-lg fa-birthday-cake"></i> Services</a>
+          <a class="nav-link" href="/checkList"><i class="fa fa-lg fa-list-alt"></i> Check List</a>
 
         </li>
-        <% if (title == "Contact") { %>
+
+        <% if (title == "Dailys") { %>
 
         <li class="nav-item active">
 
@@ -129,13 +118,29 @@
 
           <% } %>
 
-          <a class="nav-link" href="/contact"><i class="fa fa-lg fa-phone"></i> Contact</a>
+          <a class="nav-link" href="/dailys"><i class="fa fa-lg fa-stethoscope"></i> Dailys</a>
 
         </li>
 
-        <% if(typeof displayName == 'string' && displayName) { %>
+
+        <% if (title == "Vital Sign") { %>
+
+        <li class="nav-item active">
+
+          <% } else { %>
+
+        <li class="nav-item">
+
+          <% } %>
+
+          <a class="nav-link" href="/vitalSign"><i class="fa fa-lg fa-heartbeat"></i> Vital Sign</a>
+
+        </li>
+
+
+        <% if(typeof firstName == 'string' && firstName) { %>
           <li class="navbar-text"><i class="fa fa-lg fa-user"></i>
-             Welcom, <%= displayName %></li>
+             Welcom, <%= firstName %></li>
              <li class="nav-item"><a href="/logout" class="nav-link">
               <i class="fa fa-lg fa-sign-out"></i> Logout</a></li>
         <% } else { %>

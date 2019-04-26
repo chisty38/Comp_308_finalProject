@@ -4,10 +4,16 @@ let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
+let cors = require('cors');
 
 // modules for authentication
 let session = require('express-session');
 let passport = require('passport');
+
+let passportJWT = require('passport-jwt');
+let JWTStrategy = passportJWT.Strategy;
+let ExtractJWT = passportJWT.ExtractJwt;
+
 let passportLocal = require('passport-local');
 let localStrategy = passportLocal.Strategy;
 let flash = require('connect-flash');
@@ -27,7 +33,11 @@ mongoDB.once('open', () => {
 });
 
 let indexRouter = require('../routes/index');
-let contactRouter = require('../routes/contact');
+let vital_NurseRouter = require('../routes/vitalSign_Nurse');
+let dailyTipRouter = require('../routes/dailys/dailyTip');
+let dialyInfoRouter = require('../routes/dailys/dailyInfo');
+let checkListRouter = require('../routes/checkList');
+let alertRouter = require('../routes/alert');
 
 let app = express();
 
@@ -41,6 +51,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../public')));
 app.use(express.static(path.join(__dirname, '../../node_modules')));
+
+app.use(cors());
 
 // set up express-session
 app.use(session({
@@ -69,9 +81,32 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// this part verifies that the token is being sent by the user and is valid
+let jwtOptions = {};
+jwtOptions.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = DB.secret;
 
-app.use('/', indexRouter);
-app.use('/contact-list', contactRouter);
+let strategy = new JWTStrategy(jwtOptions, (jwt_payload, done) => {
+  User.findById(jwt_payload.id)
+    .then(user => {
+      return done(null, user);
+    })
+    .catch(err => {
+      return done(err, false);
+    });
+});
+
+passport.use(strategy);
+
+app.use('/api', indexRouter);
+app.use('/api/vitalSign-list-Nurse', passport.authenticate('jwt', {session: false}), vital_NurseRouter);
+app.use('/api/dailyTip', passport.authenticate('jwt', {session: false}), dailyTipRouter);
+app.use('/api/dailyInfo', passport.authenticate('jwt', {session: false}), dialyInfoRouter);
+app.use('/api/checkList-result', passport.authenticate('jwt', {session: false}), checkListRouter);
+app.use('/api/alert', passport.authenticate('jwt', {session: false}), alertRouter);
+app.get('*', (req, res) => {
+  res.sendfile(path.join(__dirname, '../../public/index.html'));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

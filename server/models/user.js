@@ -10,33 +10,36 @@ let userSchema = mongoose.Schema(
       trim: true,
       required: "username is required"
     },
-    /* taken out because password will be encrypted by passport-local-mongoose
-    password: {
-        type: String,
-        default: '',
-        trim: true,
-        required: 'password is required'
-    }
-    */
+    userID: {
+      type: String,
+      default: "",
+      trim: true,
+      required: "user ID is required"
+    },
+    firstName: {
+      type: String,
+      default: "",
+      trim: true,
+      required: "firstname is required"
+    },
+    lastName: {
+      type: String,
+      default: "",
+      trim: true,
+      required: "lastname is required"
+    },
     email: {
       type: String,
       default: "",
       trim: true,
+      match: /.+\@.+\..+/,
       required: "email is required"
     },
-    displayName: {
+    category: {
       type: String,
       default: "",
       trim: true,
-      required: "Display Name is required"
-    },
-    created: {
-      type: Date,
-      default: Date.now
-    },
-    update: {
-      type: Date,
-      default: Date.now
+      required: "category is required"
     }
   },
   {
